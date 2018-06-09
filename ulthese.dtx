@@ -1404,6 +1404,7 @@
 %    \begin{macrocode}
 \newif\ifUL@babel        \UL@babeltrue         % charger babel?
 \newif\ifUL@natbib       \UL@natbibtrue        % charger natbib?
+\newif\ifUL@unimath      \UL@unimathtrue       % charger unicode-math?
 \newif\ifUL@chapterbib   \UL@chapterbibfalse   % charger chapterbib?
 \newif\ifUL@sectionbib   \UL@sectionbibfalse   % option sectionbib de chapterbib?
 \newif\ifUL@isthesis                           % programme est une thèse?
@@ -1429,6 +1430,15 @@
 %   paquetages spécialisés de mise en forme de la bibliographie.
 %    \begin{macrocode}
 \DeclareOption{nonatbib}{\UL@natbibfalse}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{nounicode-math}
+%   L'option |nounicode-math| permet d'empêcher la classe de charger le
+%   paquetage \pkg{unicode-math} afin de le charger après d'autres packages, tels
+%   que ceux de l'AMS.
+%    \begin{macrocode}
+\DeclareOption{nounicode-math}{\UL@unimathfalse}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1677,13 +1687,18 @@
 % {\XeLaTeX} requiert le paquetage \pkg{fontspec} pour le
 % traitement des polices. Le paquetage \pkg{unicode-math} facilite
 % également le traitement des polices et des symboles mathématiques
-% avec ce moteur. Sous {\LaTeX}, il est aujourd'hui préférable
+% avec ce moteur. Il est possible d'empêcher le chargement de ce paquetage
+% par la classe via l'option |nounicode-math|. Cela est utile afin de
+% le charger manuellement, après les paquetages de l'AMS par exemple.
+% Sous {\LaTeX}, il est aujourd'hui préférable
 % d'utiliser les polices T1.
 %    \begin{macrocode}
 \ifxetex
   \RequirePackage{fontspec}
-  \RequirePackage{unicode-math}
   \defaultfontfeatures{Ligatures=TeX}
+  \ifUL@unimath
+    \RequirePackage{unicode-math}
+  \fi
 \else
   \RequirePackage[T1]{fontenc}
 \fi
